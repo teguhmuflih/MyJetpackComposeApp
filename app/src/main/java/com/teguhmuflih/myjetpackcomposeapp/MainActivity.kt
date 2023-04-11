@@ -14,41 +14,36 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.teguhmuflih.myjetpackcomposeapp.ui.theme.MyJetpackComposeAppTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             Column() {
-                Row(
-                    modifier = Modifier.padding(8.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    val checkBoxState = remember { mutableStateOf(false) }
-                    Checkbox(checked = checkBoxState.value,
-                        onCheckedChange ={ checkBoxState.value = it} )
-                    Spacer(modifier = Modifier.padding(4.dp))
-                    Text(text = "Checkbox 1")
+                val checkBoxState = remember {
+                    mutableStateOf(false)
                 }
-
-
+                CustomCheckBox(title = "Check Box 1", checkBoxState = checkBoxState.value, onCheckedPressed = {checkBoxState.value = it} )
+                checkBoxState.value = !checkBoxState.value
             }
         }
     }
 }
 
 @Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    MyJetpackComposeAppTheme {
-        Greeting("Android")
+fun CustomCheckBox(title: String,
+                   checkBoxState: Boolean,
+                   onCheckedPressed: ((Boolean) -> Unit)?
+) {
+    Row(
+        modifier = Modifier.padding(8.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Checkbox(
+            checked = checkBoxState,
+            onCheckedChange = onCheckedPressed)
+        Spacer(modifier = Modifier.padding(4.dp))
+        Text(text = title)
     }
 }
